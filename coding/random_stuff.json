@@ -1,0 +1,14 @@
+POST /workflow/run
+
+request:
+{
+  "query": "客户最近跟进情况",
+  "customer_id": "A123"
+}
+
+response:
+{
+  "summary": "...",
+  "next_action": "...",
+  "trace_id": "abc"
+}
