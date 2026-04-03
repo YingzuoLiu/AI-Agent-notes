@@ -1,0 +1,19 @@
+workflow: sales_followup_agent
+version: v1
+
+input:
+  user_query: string
+  customer_id: string
+
+state:
+  current_step: string
+  retrieved_docs: list
+  fallback_path: string
+
+tool_schema:
+  crm_search:
+    args:
+      customer_id: string
+  summary_generate:
+    args:
+      notes: string
