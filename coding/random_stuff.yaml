@@ -17,3 +17,15 @@ tool_schema:
   summary_generate:
     args:
       notes: string
+
+
+nodes:
+  - planner
+  - crm_search
+  - summary
+  - sync
+
+edges:
+  planner -> crm_search
+  crm_search -> summary
+  summary -> sync
