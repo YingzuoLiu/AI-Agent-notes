@@ -1,0 +1,33 @@
+id: suitability_check
+version: v2
+
+input_schema:
+  risk_level: int
+  liquidity_days: int
+  target_return: float
+
+tools:
+  - profile_mcp.get_user_profile
+  - product_mcp.retrieve_products
+  - policy_mcp.get_suitability_policy
+
+prompt:
+  template: suitability_reasoning_v2
+  output_format:
+    - recommendation
+    - rationale
+    - disclaimer
+
+validator:
+  rules:
+    - risk_level <= product_risk
+    - liquidity_days <= maturity_days
+    - restricted == false
+
+fallback:
+  soft_relaxation:
+    - target_return
+  downgrade:
+    - single_product
+  escalate:
+    - human_rm
