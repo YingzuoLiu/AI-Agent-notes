@@ -1,0 +1,21 @@
+name: wealth_recommendation
+description: Recommend low-risk wealth products for short-term users
+
+input_schema:
+  amount: float
+  risk_level: string
+  duration_months: int
+  cashback_required: bool
+
+execution:
+  retrieval_index: wealth_products
+  reranker: cross_encoder
+  business_rule: wealth_guardrail
+  cache_key: "{risk_level}:{duration_months}"
+
+output_schema:
+  products:
+    - product_id: string
+      expected_return: float
+      lock_period: int
+  explanation: string
