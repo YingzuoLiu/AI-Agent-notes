@@ -1,0 +1,53 @@
+skill_id: restaurant_search
+name: Restaurant Search
+description: Search restaurants based on location, cuisine, budget, rating, and opening hours.
+
+capability:
+  domain: travel
+  type: poi_search
+  sub_type: restaurant
+
+input_schema:
+  location:
+    type: string
+    required: true
+  cuisine:
+    type: string
+    required: false
+  budget_level:
+    type: string
+    enum: [low, medium, high]
+    required: false
+  min_rating:
+    type: number
+    required: false
+  open_at:
+    type: string
+    required: false
+
+providers:
+  - provider_id: google_places_restaurant
+    priority: 1
+    timeout_ms: 2000
+    fallback: amap_restaurant_search
+
+  - provider_id: amap_restaurant_search
+    priority: 2
+    timeout_ms: 2000
+
+routing_policy:
+  default_provider: google_places_restaurant
+  fallback_on:
+    - timeout
+    - empty_result
+    - invalid_schema
+
+validation:
+  required_fields:
+    - name
+    - address
+    - rating
+    - opening_hours
+  business_rules:
+    - rating >= 4.0
+    - must_be_open_at_user_time
