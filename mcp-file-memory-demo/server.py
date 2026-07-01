@@ -4,7 +4,7 @@ from store import FileMemoryStore
 
 ROOT = Path(__file__).resolve().parent
 mcp = FastMCP("file-memory-demo")
-store = FileMemoryStore(ROOT / "data" / "docs", ROOT / "data" / "permissions.json")
+store = FileMemoryStore(ROOT / "data" / "docs", ROOT / "data" / "acl.json")
 
 @mcp.tool()
 def list_allowed_files(user_id: str):
