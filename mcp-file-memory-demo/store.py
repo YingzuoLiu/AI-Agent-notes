@@ -2,13 +2,12 @@ from pathlib import Path
 import json
 
 class FileMemoryStore:
-    def __init__(self, docs_dir="data/docs", permissions_path="data/permissions.json"):
+    def __init__(self, docs_dir="data/docs", acl_path="data/acl.json"):
         self.docs_dir = Path(docs_dir)
-        self.permissions = json.loads(Path(permissions_path).read_text(encoding="utf-8"))
+        self.acl = json.loads(Path(acl_path).read_text(encoding="utf-8"))
 
     def can_read(self, user_id, project_id):
-        user = self.permissions.get("users", {}).get(user_id, {})
-        return project_id in user.get("projects", [])
+        return project_id in self.acl.get(user_id, [])
 
     def list_allowed_files(self, user_id):
         files = []
