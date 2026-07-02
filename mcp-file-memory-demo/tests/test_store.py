@@ -22,6 +22,22 @@ class StoreTest(unittest.TestCase):
         projects = {item["project_id"] for item in files}
         self.assertIn("alpha", projects)
 
+    def test_bob_cannot_read_alpha(self):
+        result = self.store.read_file_memory("bob", "alpha_runbook")
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["error"], "access_denied")
+
+    def test_alice_can_read_alpha(self):
+        result = self.store.read_file_memory("alice", "alpha_runbook")
+        self.assertTrue(result["ok"])
+        self.assertIn("agent runtime", result["data"]["content"].lower())
+
+    def test_search_uses_allowed_docs_only(self):
+        bob_results = self.store.search_file_memory("agent runtime", "bob")
+        self.assertEqual(bob_results, [])
+        alice_results = self.store.search_file_memory("agent runtime", "alice")
+        self.assertGreaterEqual(len(alice_results), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
